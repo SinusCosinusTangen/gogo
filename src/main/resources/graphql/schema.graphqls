@@ -1,0 +1,101 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    role: String!
+}
+
+type Flight {
+    id: ID!
+    flightNumber: String!
+    airline: String!
+    origin: String!
+    destination: String!
+    departureTime: String!
+    arrivalTime: String!
+    availableSeats: Int!
+    totalSeats: Int!
+    classes: [AirlineClass!]!
+}
+
+type AirlineClass {
+    className: String!
+    seats: [Seat]!
+    price: Int!
+    availableSeats: Int!
+    totalSeats: Int!
+}
+
+type Seat {
+    seatNumber: String!
+    seatStatus: String!
+}
+
+type Passenger {
+    id: ID!
+    passportNumber: Int!
+    name: String!
+    salutation: String!
+    birthDate: String!
+    nationality: String!
+    passportExpired: String!
+    issuer: String!
+    class: String!
+    seatNumber: String!
+    price: Int!
+}
+
+type Booking {
+    id: ID!
+    user: User!
+    flight: Flight!
+    seatNumber: Int!
+    status: String!
+    totalPrice: Int!
+    bookingTime: String!
+    passengers: [Passenger!]!
+}
+
+type Query {
+    flights: [Flight]
+    flight(id: ID!): Flight
+    users: [User]
+    bookings: [Booking]
+    airlineClasses: [AirlineClass]
+    airlineClass(class: String!): AirlineClass
+    user: User
+    passenger: Passenger
+
+}
+
+input FlightInput {
+    flightNumber: String!
+    airline: String!
+    origin: String!
+    destination: String!
+    departureTime: String!
+    arrivalTime: String!
+    totalSeats: Int!
+    classes: [AirlineClassInput!]!
+}
+
+input AirlineClassInput {
+    className: String!
+    seats: [SeatInput!]!
+    price: Int!
+    totalSeats: Int!
+}
+
+input SeatInput {
+    seatNumber: String!
+}
+
+type Mutation {
+    createUser(username: String!, email: String!, password: String!, role: String!): User
+    findByUsername(username: String!): User
+    changePassword(username: String!, email:String!, password: String!): User
+
+    createFlight(flightInput: FlightInput!): Flight
+    createBooking(userId: ID!, flightId: ID!, seatNumber: Int!): Booking
+    cancelBooking(id: ID!): Booking
+}
